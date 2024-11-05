@@ -10,7 +10,7 @@ const (
 
 type Task struct {
 	ID          uint       `json:"id"`
-	Title       string     `json:"name"`
+	Title       string     `json:"title"`
 	Status      TaskStatus `json:"status"`
 	Description string     `json:"description"`
 }
