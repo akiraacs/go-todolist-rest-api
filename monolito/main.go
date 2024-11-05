@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,7 @@ const (
 
 type task struct {
 	ID          uint       `json:"id"`
-	Title       string     `json:"name"`
+	Title       string     `json:"title"`
 	Status      taskStatus `json:"status"`
 	Description string     `json:"description"`
 }
@@ -51,9 +51,10 @@ func getTaskByID(c *gin.Context) {
 	id := c.Param("id")
 
 	for _, task := range tasks {
-		if task
+		if strconv.FormatUint(uint64(task.ID), 10) == id {
+			c.IndentedJSON(http.StatusOK, task)
+			return
+		}
 	}
-
-	fmt.Println(id)
-
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
