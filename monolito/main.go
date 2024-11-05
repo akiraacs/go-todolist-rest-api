@@ -28,7 +28,9 @@ var tasks = []Task{
 	{ID: 2, Title: "Tirar lixo", Status: StatusPending, Description: "Descer com as sacolas de lixo"},
 	{ID: 3, Title: "Passar pano", Status: StatusInProgress, Description: "Passar pano e deixar a casa limpa"},
 	{ID: 4, Title: "Estudar", Status: StatusInProgress, Description: "Estudar pra ficar rico né pae"},
+	{ID: 5, Title: "Atividade fisica", Status: StatusCompleted, Description: "Necessario separar um momento para atividades fisicas"},
 }
+
 
 func main() {
 	log.Println("Start Application!")
@@ -41,12 +43,13 @@ func main() {
 	router.Run(":8080")
 }
 
-// getAllTasks retorna todas as tasks cadastradas
+// getTasks retorna todas as tasks cadastradas
 func getTasks(c *gin.Context) {
 	specificTasks := getSpecificTasks(c)
 
 	if len(specificTasks) != 0 {
-		tasks = specificTasks
+		c.IndentedJSON(http.StatusOK, specificTasks)
+		return
 	}
 
 	c.IndentedJSON(http.StatusOK, tasks)
@@ -57,6 +60,8 @@ func getSpecificTasks(c *gin.Context) []Task {
 
 	title := c.Query("title")
 	status := c.Query("status")
+
+	// Implementar erro ao informar title ou status não existentes
 
 	// Obtem as tasks correspondentes aos parâmetros da requisição
 	for _, task := range tasks {
