@@ -17,12 +17,13 @@ const (
 )
 
 type Task struct {
-	ID          uint       `json:"id"`
+	ID          int       `json:"id"`
 	Title       string     `json:"title"`
 	Status      taskStatus `json:"status"`
 	Description string     `json:"description"`
 }
 
+// Mock database
 var tasks = []Task{
 	{ID: 1, Title: "Lavar louça", Status: StatusCompleted, Description: "Necessário lavar louça todos os dias"},
 	{ID: 2, Title: "Tirar lixo", Status: StatusPending, Description: "Descer com as sacolas de lixo"},
@@ -30,7 +31,6 @@ var tasks = []Task{
 	{ID: 4, Title: "Estudar", Status: StatusInProgress, Description: "Estudar pra ficar rico né pae"},
 	{ID: 5, Title: "Atividade fisica", Status: StatusCompleted, Description: "Necessario separar um momento para atividades fisicas"},
 }
-
 
 func main() {
 	log.Println("Start Application!")
@@ -77,7 +77,7 @@ func getTaskByID(c *gin.Context) {
 	id := c.Param("id")
 
 	for _, task := range tasks {
-		if strconv.FormatUint(uint64(task.ID), 10) == id {
+		if strconv.Itoa(task.ID) == id {
 			c.IndentedJSON(http.StatusOK, task)
 			return
 		}
