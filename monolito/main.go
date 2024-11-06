@@ -39,6 +39,7 @@ func main() {
 
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskByID)
+	router.POST("/tasks", createTask)
 
 	router.Run(":8080")
 }
@@ -83,4 +84,20 @@ func getTaskByID(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
+}
+
+func createTask(c *gin.Context) {
+	var newTask Task
+
+	if err := c.ShouldBindJSON(&newTask); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+		// Tratar as mensagens de retorno para cada tipo de erro err.Tag()
+	}
+
+	// Adiciona nova task a listagem de tasks
+	newTask.ID = len(tasks) + 1
+	tasks = append(tasks, newTask)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Task created successfully!"})
 }
