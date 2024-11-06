@@ -57,6 +57,7 @@ func getTasks(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
+// getSpecificTasks obtem tasks especificas com base na query da requisição
 func getSpecificTasks(c *gin.Context) []Task {
 	var specificTasks []Task
 
@@ -87,6 +88,7 @@ func getTaskByID(c *gin.Context) {
 	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
 
+// createTask cria uma nova task e adiciona a listagem de tasks criadas
 func createTask(c *gin.Context) {
 	var newTask Task
 
