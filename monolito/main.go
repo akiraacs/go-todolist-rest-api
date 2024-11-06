@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -93,6 +94,15 @@ func createTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 		// Tratar as mensagens de retorno para cada tipo de erro err.Tag()
+	}
+
+	// Verifica se a task que deseja ser criada já não existe
+	for _, task := range tasks {
+		if task.Title == newTask.Title {
+			// Status Code 409 - Conflict
+			c.JSON(http.StatusConflict, gin.H{"message": fmt.Sprintf("title %s already exists", task.Title)})
+			return
+		}
 	}
 
 	// Adiciona nova task a listagem de tasks
