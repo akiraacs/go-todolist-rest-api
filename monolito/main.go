@@ -48,11 +48,11 @@ func getTasks(c *gin.Context) {
 	specificTasks := getSpecificTasks(c)
 
 	if len(specificTasks) != 0 {
-		c.IndentedJSON(http.StatusOK, specificTasks)
+		c.JSON(http.StatusOK, specificTasks)
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, tasks)
+	c.JSON(http.StatusOK, tasks)
 }
 
 func getSpecificTasks(c *gin.Context) []Task {
@@ -78,9 +78,9 @@ func getTaskByID(c *gin.Context) {
 
 	for _, task := range tasks {
 		if strconv.Itoa(task.ID) == id {
-			c.IndentedJSON(http.StatusOK, task)
+			c.JSON(http.StatusOK, task)
 			return
 		}
 	}
-	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "task not found"})
+	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
