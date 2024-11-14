@@ -1,0 +1,51 @@
+definitions:
+  main.Task:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      status:
+        $ref: '#/definitions/main.taskStatus'
+      title:
+        type: string
+    required:
+    - status
+    - title
+    type: object
+  main.taskStatus:
+    enum:
+    - Pending
+    - In Progress
+    - Completed
+    type: string
+    x-enum-varnames:
+    - StatusPending
+    - StatusInProgress
+    - StatusCompleted
+info:
+  contact: {}
+paths:
+  /tasks:
+    post:
+      consumes:
+      - application/json
+      description: Adiciona uma nova tarefa à lista de tarefas
+      parameters:
+      - description: Task data
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/main.Task'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Task'
+      summary: Adiciona uma nova tarefa
+      tags:
+      - tasks
+swagger: "2.0"

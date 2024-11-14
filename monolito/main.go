@@ -7,6 +7,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "github.com/akiraacs/go-todolist-rest-api/monolito/docs"
 )
 
 type taskStatus string
@@ -38,9 +42,12 @@ func main() {
 
 	router := gin.Default()
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskByID)
 	router.POST("/tasks", createTask)
+	router.DELETE("/tasks", deleteTask)
 
 	router.Run(":8080")
 }
@@ -77,6 +84,14 @@ func getTaskByID(c *gin.Context) {
 	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
 
+// @Summary Adiciona uma nova tarefa
+// @Description Adiciona uma nova tarefa à lista de tarefas
+// @Tags tasks
+// @Accept  json
+// @Produce  json
+// @Param task body Task true "Task data"
+// @Success 200 {object} Task
+// @Router /tasks [post]
 // createTask cria uma nova task e adiciona a listagem de tasks criadas
 func createTask(c *gin.Context) {
 	var newTask Task
@@ -101,4 +116,8 @@ func createTask(c *gin.Context) {
 	tasks = append(tasks, newTask)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Task created successfully!"})
+}
+
+func deleteTask(c *gin.Context) {
+
 }
