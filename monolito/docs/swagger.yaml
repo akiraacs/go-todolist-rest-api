@@ -23,8 +23,14 @@ definitions:
     - StatusPending
     - StatusInProgress
     - StatusCompleted
+host: localhost:8080
 info:
-  contact: {}
+  contact:
+    email: adrian.coradini3141592@hotmail.com
+    name: Adrian Coradini
+  description: REST API para consultar, criar, atualizar e deletas tarefas
+  title: REST API To-Do List
+  version: 1.0.0
 paths:
   /tasks:
     post:

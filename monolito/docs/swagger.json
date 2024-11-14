@@ -1,8 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "REST API para consultar, criar, atualizar e deletas tarefas",
+        "title": "REST API To-Do List",
+        "contact": {
+            "name": "Adrian Coradini",
+            "email": "adrian.coradini3141592@hotmail.com"
+        },
+        "version": "1.0.0"
     },
+    "host": "localhost:8080",
     "paths": {
         "/tasks": {
             "post": {

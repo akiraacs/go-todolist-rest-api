@@ -37,6 +37,14 @@ var tasks = []Task{
 	{ID: 5, Title: "Atividade fisica", Status: StatusCompleted, Description: "Necessario separar um momento para atividades fisicas"},
 }
 
+// @title  	       REST API To-Do List
+// @version        1.0.0
+// @description    REST API para consultar, criar, atualizar e deletas tarefas
+
+// @contact.name   Adrian Coradini
+// @contact.email  adrian.coradini3141592@hotmail.com
+
+// @host      localhost:8080
 func main() {
 	log.Println("Start Application!")
 
