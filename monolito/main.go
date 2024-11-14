@@ -47,32 +47,21 @@ func main() {
 
 // getTasks retorna todas as tasks cadastradas
 func getTasks(c *gin.Context) {
-	specificTasks := getSpecificTasks(c)
-
-	if len(specificTasks) != 0 {
-		c.JSON(http.StatusOK, specificTasks)
-		return
-	}
-
-	c.JSON(http.StatusOK, tasks)
-}
-
-// getSpecificTasks obtem tasks especificas com base na query da requisição
-func getSpecificTasks(c *gin.Context) []Task {
-	var specificTasks []Task
+	var tasksResponse []Task
 
 	title := c.Query("title")
 	status := c.Query("status")
-
 	// Implementar erro ao informar title ou status não existentes
 
 	// Obtem as tasks correspondentes aos parâmetros da requisição
+	// Ou retorna todas as taks caso não seja informado query
 	for _, task := range tasks {
 		if (title == "" || task.Title == title) && (status == "" || string(task.Status) == status) {
-			specificTasks = append(specificTasks, task)
+			tasksResponse = append(tasksResponse, task)
 		}
 	}
-	return specificTasks
+
+	c.JSON(http.StatusOK, tasksResponse)
 }
 
 // getTaskByID retorna uma task especifica de acordo com o ID da task
