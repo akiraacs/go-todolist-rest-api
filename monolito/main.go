@@ -55,12 +55,13 @@ func main() {
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskByID)
 	router.POST("/tasks", createTask)
-	router.DELETE("/tasks/:id", deleteTask)
+	router.DELETE("/tasks/:id", deleteTaskByID)
+	router.DELETE("/tasks/", deleteTaskByQuery)
 
 	router.Run(":8080")
 }
 
-// getTasks retorna todas as tasks cadastradas
+// getTasks retorna todas as tasks cadastradas ou tasks especificas
 func getTasks(c *gin.Context) {
 	var tasksResponse []Task
 
@@ -126,15 +127,14 @@ func createTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Task created successfully!"})
 }
 
-// deleteTask exclui a task informada por ID ou titulo da listagem de tasks
-func deleteTask(c *gin.Context) {
+// deleteTask exclui a task pelo ID informado
+func deleteTaskByID(c *gin.Context) {
 	id := c.Param("id")
-	title := c.Query("title")
 
 	// Verifica se foi passado o ID ou o titulo da task, caso nao, responde como erro
-	if id == "" && title == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "enter ID or title"})
-	return
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "enter ID"})
+		return
 	}
 
 	for i, task := range tasks {
@@ -146,4 +146,16 @@ func deleteTask(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
+}
+
+
+func deleteTaskByQuery(c *gin.Context) {
+	title := c.Query("title")
+
+	// Verifica se foi passado o ID ou o titulo da task, caso nao, responde como erro
+	if title == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "enter title"})
+		return
+	}
+
 }
