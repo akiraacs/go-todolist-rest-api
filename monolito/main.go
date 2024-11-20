@@ -55,8 +55,6 @@ func main() {
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskByID)
 	router.POST("/tasks", createTask)
-	router.DELETE("/tasks/:id", deleteTaskByID)
-	router.DELETE("/tasks/", deleteTaskByQuery)
 
 	router.Run(":8080")
 }
@@ -77,6 +75,11 @@ func getTasks(c *gin.Context) {
 		}
 	}
 
+	if tasksResponse == nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
+		return
+	}
+
 	c.JSON(http.StatusOK, tasksResponse)
 }
 
@@ -90,6 +93,7 @@ func getTaskByID(c *gin.Context) {
 			return
 		}
 	}
+
 	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
 
@@ -125,37 +129,4 @@ func createTask(c *gin.Context) {
 	tasks = append(tasks, newTask)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Task created successfully!"})
-}
-
-// deleteTask exclui a task pelo ID informado
-func deleteTaskByID(c *gin.Context) {
-	id := c.Param("id")
-
-	// Verifica se foi passado o ID ou o titulo da task, caso nao, responde como erro
-	if id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "enter ID"})
-		return
-	}
-
-	for i, task := range tasks {
-		if strconv.Itoa(task.ID) == id || task.Title == title {
-			tasks = append(tasks[:i], tasks[i+1:]...)
-			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("task %s deleted", task.Title)})
-			return
-		}
-	}
-
-	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
-}
-
-
-func deleteTaskByQuery(c *gin.Context) {
-	title := c.Query("title")
-
-	// Verifica se foi passado o ID ou o titulo da task, caso nao, responde como erro
-	if title == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "enter title"})
-		return
-	}
-
 }
