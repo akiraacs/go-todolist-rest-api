@@ -55,6 +55,7 @@ func main() {
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskByID)
 	router.POST("/tasks", createTask)
+	router.PUT("/tasks", updateTask)
 	router.DELETE("/tasks/", deleteTaskByQuery)
 	router.DELETE("/tasks/:id", deleteTaskByID)
 
@@ -131,6 +132,25 @@ func createTask(c *gin.Context) {
 	tasks = append(tasks, newTask)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Task created successfully!"})
+}
+
+// updateTask
+func updateTask(c *gin.Context) {
+	var updatedTask Task
+
+	if err := c.ShouldBindJSON(&updatedTask); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		// return
+		// Tratar as mensagens de retorno para cada tipo de erro err.Tag()
+	}
+
+	fmt.Println(updatedTask)
+
+	// if err := c.ShouldBindJSON(&updatedTask); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+	// 	return
+	// 	// Tratar as mensagens de retorno para cada tipo de erro err.Tag()
+	// }
 }
 
 // deleteTaskByQuery exclui a task pelo titulo informado
