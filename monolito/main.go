@@ -166,7 +166,7 @@ func updateTask(c *gin.Context) {
 func deleteTaskByQuery(c *gin.Context) {
 	title := c.Query("title")
 
-	// Verifica se foi passado o ID ou o titulo da task, caso nao, responde como erro
+	// Verifica se foi passado o titulo da task, caso nao, responde como erro
 	if title == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "enter the title"})
 		return
@@ -187,7 +187,7 @@ func deleteTaskByQuery(c *gin.Context) {
 func deleteTaskByID(c *gin.Context) {
 	id := c.Param("id")
 
-	// Verifica se foi passado o ID ou o titulo da task, caso nao, responde como erro
+	// Verifica se foi passado o ID da task, caso nao, responde como erro
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "enter the ID"})
 		return
