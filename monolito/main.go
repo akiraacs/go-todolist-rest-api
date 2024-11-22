@@ -55,7 +55,7 @@ func main() {
 	router.GET("/tasks", getTasks)
 	router.GET("/tasks/:id", getTaskByID)
 	router.POST("/tasks", createTask)
-	router.PUT("/tasks", updateTask)
+	router.PUT("/tasks/:id", updateTask)
 	router.DELETE("/tasks/", deleteTaskByQuery)
 	router.DELETE("/tasks/:id", deleteTaskByID)
 
@@ -134,23 +134,32 @@ func createTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Task created successfully!"})
 }
 
-// updateTask
+// updateTask atualiza os dados da task selecionada
 func updateTask(c *gin.Context) {
-	var updatedTask Task
+	id := c.Param("id")
 
+	// Verifica se foi passado o ID, caso nao, responde como erro
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "enter the ID"})
+		return
+	}
+
+	var updatedTask Task
 	if err := c.ShouldBindJSON(&updatedTask); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		// return
+		return
 		// Tratar as mensagens de retorno para cada tipo de erro err.Tag()
 	}
 
-	fmt.Println(updatedTask)
+	for i, task := range tasks {
+		if strconv.Itoa(task.ID) == id {
+			tasks[i] = updatedTask
+			c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("task %s updated", task.Title)})
+			return
+		}
+	}
 
-	// if err := c.ShouldBindJSON(&updatedTask); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-	// 	return
-	// 	// Tratar as mensagens de retorno para cada tipo de erro err.Tag()
-	// }
+	c.JSON(http.StatusNotFound, gin.H{"message": "task not found"})
 }
 
 // deleteTaskByQuery exclui a task pelo titulo informado
