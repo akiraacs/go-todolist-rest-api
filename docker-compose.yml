@@ -1,13 +1,21 @@
 services:
+  app:
+    image: golang:1.22.1
+    volumes:
+      - .:/app
+    working_dir: /app
+    env_file:
+      - .env
+
   go_db:
     image: postgres:12
     container_name: go_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5433:5432"
+      - "5433:${DB_PORT}"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
