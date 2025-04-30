@@ -1,31 +1,29 @@
 package main
 
 import (
-	"fmt"
+    "log"
 
-	"github.com/akiraacs/go-todolist-rest-api/internal/api"
-	"github.com/akiraacs/go-todolist-rest-api/internal/models"
-	"github.com/akiraacs/go-todolist-rest-api/internal/repository"
+    "github.com/akiraacs/go-todolist-rest-api/internal/api"
+    "github.com/akiraacs/go-todolist-rest-api/internal/api/handlers"
+    "github.com/akiraacs/go-todolist-rest-api/internal/db"
+    "github.com/akiraacs/go-todolist-rest-api/internal/repository"
+    "github.com/akiraacs/go-todolist-rest-api/internal/usecase"
 )
 
 func main() {
-	taskRepo := repository.Task{}
+    log.Println("Starting application...")
 
-	taskAdrian := models.Task{
-		ID:          1,
-		Title:       "Test Title",
-		Status:      models.StatusPending,
-		Description: "Test Description",
-	}
+    // Configura o banco de dados
+    database := db.ConnectDB()
 
-	allTasks := taskRepo.GetAllTasks()
-	fmt.Println(allTasks)
+    // Inicializa as dependências
+    taskRepo := repository.NewTaskRepository(database)
+    taskUseCase := usecase.NewTaskUseCase(taskRepo)
+    taskHandler := handlers.NewTaskHandler(taskUseCase)
 
-	taskRepo.AddTask(taskAdrian)
-	allTasks = taskRepo.GetAllTasks()
+    // Configura as rotas
+    router := api.SetupRoutes(taskHandler)
 
-	fmt.Println(allTasks)
-
-	router := api.Routes()
-	router.Run(":8080")
+    // Inicia o servidor
+    router.Run(":8080")
 }
