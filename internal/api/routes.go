@@ -5,10 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Routes() *gin.Engine {
+func SetupRoutes(taskHandler *handlers.TaskHandler) *gin.Engine {
 	router := gin.Default()
 
-	router.GET("/tasks", handlers.GetAllTasks)
-	router.GET("/tasks/:id", handlers.GetTaskByID)
+	//Configuração das rotas
+	router.GET("/tasks", taskHandler.GetTask)
+	router.GET("/tasks/:id", taskHandler.GetTask)
+	
 	return router
 }
