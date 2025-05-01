@@ -4,17 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/akiraacs/go-todolist-rest-api/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
-
-type TaskHandler struct {
-	TaskUseCase *usecase.TaskUseCase
-}
-
-func NewTaskHandler(usecase *usecase.TaskUseCase) *TaskHandler {
-	return &TaskHandler{TaskUseCase: usecase}
-}
 
 func (h *TaskHandler) GetTask(c *gin.Context) {
 	// Verifica se o ID foi passado como parâmetro
