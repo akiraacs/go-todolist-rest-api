@@ -11,6 +11,7 @@ func SetupRoutes(taskHandler *handlers.TaskHandler) *gin.Engine {
 	//Configuração das rotas
 	router.GET("/tasks", taskHandler.GetTask)
 	router.GET("/tasks/:id", taskHandler.GetTask)
+	router.POST("/tasks", taskHandler.CreateTask)
 	
 	return router
 }
